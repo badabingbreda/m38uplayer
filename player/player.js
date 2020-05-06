@@ -10,6 +10,16 @@ function playM3u8(url){
       hls.on(Hls.Events.MANIFEST_PARSED,function() {
         video.play();
       });
+      hls.on(Hls.Events.ERROR, function( event, data ) {
+
+        if ( data.type == 'networkError' ) {
+          //video.remove();
+
+          // send a response back to the page that included the iframe
+          window.top.postMessage( { error : data.type } , '*');
+        }
+      });
+
       document.title = url
     }
 	else if (video.canPlayType('application/vnd.apple.mpegurl')) {
